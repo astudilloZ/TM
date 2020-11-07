@@ -3,6 +3,14 @@ Realizó: Juan Sebastian Astudillo
 TG: Fly3d
 25-oct-2020
 """
+
+"""
+Pasos git:
+1. git add.
+2. git commit -m "nota"   (git commit -am “msj”)
+3. git pull origin master
+4. git push origin master
+"""
     
 import sys
 import mysql.connector 
