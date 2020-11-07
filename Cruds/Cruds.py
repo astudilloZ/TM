@@ -11,7 +11,7 @@ Pasos git:
 3. git pull origin master
 4. git push origin master
 """
-    
+
 import sys
 import mysql.connector 
 
