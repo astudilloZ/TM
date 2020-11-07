@@ -7,7 +7,7 @@ TG: Fly3d
 import sys
 import mysql.connector 
 
-"""Conexión a tabla Mision
+"""Conexión a tabla Mision - Nuevo commit
 
 Funciones:
 
