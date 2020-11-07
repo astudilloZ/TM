@@ -1,5 +1,11 @@
+"""
+Realizó: Juan Sebastian Astudillo
+TG: Fly3d
+25-oct-2020
+"""
+
 import sys
-from ConectoresBD import Database_Table_Usuarios
+from Cruds.Cruds import Database_Mision 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QGridLayout, QMessageBox, QLabel, QPushButton, QLineEdit, QSpinBox
 
