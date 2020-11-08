@@ -4,10 +4,13 @@ TG: Fly3d
 25-oct-2020
 """
 
+#Importar cruds y librerias
 import sys
-from Cruds.Cruds import Database_Mision 
+sys.path.append('/Users/juansebastianastudillozambrano/Documents/TM-git/Cruds')
+from Cruds import Database_Mision 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QGridLayout, QMessageBox, QLabel, QPushButton, QLineEdit, QSpinBox
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QDialog, QGridLayout, 
+QMessageBox, QLabel, QPushButton, QLineEdit, QSpinBox)
 
 class IngresoUsuarios(QMainWindow):
     #Método constructor de la clase
