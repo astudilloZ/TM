@@ -12,4 +12,6 @@
             "console": "integratedTerminal"
         }
     ]
+
+    ,"python.linting.pylintArgs": ["-rn --extension-pkg-whitelist=PyQt5 --disable=blacklisted-name,invalid-name,missing-docstring"]
 }
