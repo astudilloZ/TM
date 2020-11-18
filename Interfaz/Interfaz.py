@@ -18,7 +18,7 @@ class Interfaz(QMainWindow):
         #Si se realizó un ingreso satisfactorio se despliega la ventana principal
         if ingreso == True:
             #Cargar la configuración del archivo .ui en el objeto
-            uic.loadUi("Main.ui", self)
+            uic.loadUi("/Users/juansebastianastudillozambrano/Documents/TM-git/Interfaz/Main.ui", self)
             self.setWindowTitle("Fly3D")
             #Centrar
             self.centerOnScreen()

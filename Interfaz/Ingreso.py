@@ -23,7 +23,7 @@ class IngresoUsuarios(QMainWindow):
         #Iniciar el objeto QMainWindow
         QMainWindow.__init__(self)
         #Cargar la configuración del archivo .ui en el objeto
-        uic.loadUi("Login.ui", self) 
+        uic.loadUi("/Users/juansebastianastudillozambrano/Documents/TM-git/Interfaz/Login.ui", self) 
         self.setWindowTitle("Fly3D")
         #Poner campos de contraseña ocultos
         #self.ContrasenaIS.setEchoMode(QLineEdit.Password)
