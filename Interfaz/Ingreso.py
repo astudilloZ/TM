@@ -4,10 +4,11 @@ TG: Fly3d
 25-oct-2020
 """
 
-#Importar cruds y librerias
+#Importar paths
 import sys
-sys.path.append('/Users/juansebastianastudillozambrano/Documents/TM-git/Cruds')
-from Cruds import Database_Mision 
+#sys.path.append('/Users/juansebastianastudillozambrano/Documents/TM-git/Cruds')
+#Importar librerias 
+#from Cruds import Database_Mision 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QDialog, QGridLayout, 
 QMessageBox, QLabel, QPushButton, QLineEdit, QSpinBox)
@@ -25,13 +26,13 @@ class IngresoUsuarios(QMainWindow):
         uic.loadUi("Login.ui", self) 
         self.setWindowTitle("Fly3D")
         #Poner campos de contraseña ocultos
-        self.ContrasenaIS.setEchoMode(QLineEdit.Password)
-        self.ContrasenaR.setEchoMode(QLineEdit.Password)
-        self.ContrasenaR2.setEchoMode(QLineEdit.Password)
+        #self.ContrasenaIS.setEchoMode(QLineEdit.Password)
+        #self.ContrasenaR.setEchoMode(QLineEdit.Password)
+        #self.ContrasenaR2.setEchoMode(QLineEdit.Password)
         self.centerOnScreen()
         #Listeners de los botones
-        self.Rbutton.clicked.connect(self.InsertarUsuario)
-        self.ISbutton.clicked.connect(self.IniciarSesion)
+        #self.Rbutton.clicked.connect(self.InsertarUsuario)
+        #self.ISbutton.clicked.connect(self.IniciarSesion)
 
     def get_nombre(self):
         global nombre
@@ -59,7 +60,7 @@ class IngresoUsuarios(QMainWindow):
         else:
             event.accept()
             sys.exit
-
+"""
     #Metodo registrarse 
     def InsertarUsuario(self):
         #Extraer información
@@ -125,7 +126,7 @@ class IngresoUsuarios(QMainWindow):
             else:
                 QMessageBox.warning(self, "Error", "El usuario no existe!!", QMessageBox.Ok)
         bd.close()
-
+"""
 
 #Instancia para iniciar una aplicación
 app = QApplication(sys.argv)

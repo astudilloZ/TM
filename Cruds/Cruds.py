@@ -326,15 +326,3 @@ class Database_Waypoints:
 
     def fetchone(self):
         return self.cursor.fetchone() 
-
-
-def main():
-    bd = Database_Municipio()
-    #idDepto = bd.ObtenerIdDepto('Medellin')
-
-    print(bd.ObtenerDepto('Palmira'))
-
-    bd.close()
-
-
-main()
