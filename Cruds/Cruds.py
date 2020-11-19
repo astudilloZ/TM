@@ -186,7 +186,7 @@ class Database_Municipio:
     def ObtenerMunicipios(self):
         self.cursor.execute("SELECT nombre FROM municipio")
         usuarios = self.cursor.fetchall()
-        return usuarios 
+        return usuarios
     
     def IngresarMunicipio(self, deptoId, nombre, descripcion):
         self.cursor.execute(("INSERT INTO municipio(Depto_id, nombre, descripcion) VALUES (%s, %s, %s)"), (deptoId, nombre, descripcion,))
@@ -326,3 +326,11 @@ class Database_Waypoints:
 
     def fetchone(self):
         return self.cursor.fetchone() 
+
+"""
+con = Database_Municipio()
+municipios = con.ObtenerMunicipios()
+data = str(municipios[0])[2:-3]
+print(data)
+con.close()
+"""

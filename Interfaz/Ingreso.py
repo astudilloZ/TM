@@ -6,9 +6,9 @@ TG: Fly3d
 
 #Importar paths
 import sys
-#sys.path.append('/Users/juansebastianastudillozambrano/Documents/TM-git/Cruds')
+sys.path.append('/Users/juansebastianastudillozambrano/Documents/TM-git/Cruds')
 #Importar librerias 
-#from Cruds import Database_Mision 
+from Cruds import Database_Mision, Database_Municipio, Database_Depto
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QDialog, QGridLayout, 
 QMessageBox, QLabel, QPushButton, QLineEdit, QSpinBox)
@@ -26,13 +26,16 @@ class IngresoUsuarios(QMainWindow):
         uic.loadUi("/Users/juansebastianastudillozambrano/Documents/TM-git/Interfaz/Login.ui", self) 
         self.setWindowTitle("Fly3D")
         #Poner campos de contraseña ocultos
-        #self.ContrasenaIS.setEchoMode(QLineEdit.Password)
-        #self.ContrasenaR.setEchoMode(QLineEdit.Password)
-        #self.ContrasenaR2.setEchoMode(QLineEdit.Password)
+        self.contrasenaIS.setEchoMode(QLineEdit.Password)
+        self.contrasenaR.setEchoMode(QLineEdit.Password)
+        self.contrasenaR2.setEchoMode(QLineEdit.Password)
+        #Centrar pantalla
         self.centerOnScreen()
+        #Llenar combo box
+        self.mostrarDeptos()
         #Listeners de los botones
-        #self.Rbutton.clicked.connect(self.InsertarUsuario)
-        #self.ISbutton.clicked.connect(self.IniciarSesion)
+        self.Rbutton.clicked.connect(self.insertarUsuario)
+        self.ISbutton.clicked.connect(self.IniciarSesion)
 
     def get_nombre(self):
         global nombre
@@ -60,15 +63,35 @@ class IngresoUsuarios(QMainWindow):
         else:
             event.accept()
             sys.exit
-"""
+
+    def mostrarDeptos(self):
+        con = Database_Depto()
+        municipios = con.ObtenerDeptos()
+        con.close()
+        for i in range(len(municipios)):
+            self.deptoCB.addItem(str(municipios[i])[2:-3])
+
+    
+
     #Metodo registrarse 
-    def InsertarUsuario(self):
+    def insertarUsuario(self):
         #Extraer información
-        nombreIntroducido = self.nombreUsuarioR.text()
-        contrasenaIntroducida = self.ContrasenaR.text()
-        contrasenaIntroducidaConfirmacion = self.ContrasenaR2.text()
-        emailIntroducido = self.EmailR.text()
-        direccionIntroducida = self.DireccionR.text()
+        depto_I = ""
+        municipio_I = ""
+        lugar_I = self.lugarR.text()       
+        nombre_I= self.nombreR.text()
+        apellido_I = self.apellidoR.text()
+        email_I = self.emailR.text()
+        contrasena_I = self.ContrasenaR.text()
+        contrasena_Confirmacion = self.ContrasenaR2.text()
+        fecha_Ini_Mision = ""
+        fecha_Fin_Mision = ""
+
+        print("depto: "+str(depto_I)+" muni: "+str(municipio_I)+" lugar: "+str(lugar_I)+" nombreI: "+str(nombre_I))
+        print(" apellidoI: "+str(apellido_I)+" emailI: "+str(email_I)+" contrasenaI: "+str(contrasena_I))
+        print(" contrasenaI2: "+str(contrasena_Confirmacion)+" fechaI: "+str(fecha_Ini_Mision)+" fechaF: "+str(fecha_Fin_Mision))
+
+        """
         #Verificar que los campos sean validos
         if nombreIntroducido == "" or contrasenaIntroducida == "" or emailIntroducido == "":
             QMessageBox.warning(self, "Error en las credenciales", "Los campos nombre de usuario, email y/o contraseña no pueden ser nulos", QMessageBox.Ok)
@@ -92,15 +115,18 @@ class IngresoUsuarios(QMainWindow):
                 QMessageBox.warning(self, "Error", "El usuario ya existe!!", QMessageBox.Ok)  
             #Cerrar conexió base de datos
             bd.close()
+        """
 
     #Metodo iniciar sesión
     def IniciarSesion(self):
         #Obtener información
         emailIntroducido = self.EmailIS.text()
         contrasenaIntroducida = self.ContrasenaIS.text()
-        bd = Database_Table_Usuarios()
-        global nombre
-        nombre = bd.ObtenerNombreUsuario(emailIntroducido)       
+        #bd = Database_Table_Usuarios()
+        #global nombre
+        #nombre = bd.ObtenerNombreUsuario(emailIntroducido)  
+
+        """     
         #Verificar que los campos sean validos
         if emailIntroducido == "" or contrasenaIntroducida == "":
             QMessageBox.warning(self, "Error en las credenciales", "Los campos email y/o contraseña no pueden ser nulos", QMessageBox.Ok)
@@ -126,7 +152,8 @@ class IngresoUsuarios(QMainWindow):
             else:
                 QMessageBox.warning(self, "Error", "El usuario no existe!!", QMessageBox.Ok)
         bd.close()
-"""
+        """
+
 
 #Instancia para iniciar una aplicación
 app = QApplication(sys.argv)
