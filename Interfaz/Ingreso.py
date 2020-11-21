@@ -36,7 +36,7 @@ class IngresoUsuarios(QMainWindow):
         #Listeners de los botones
         self.Rbutton.clicked.connect(self.insertarUsuario)
         self.ISbutton.clicked.connect(self.IniciarSesion)
-
+        self.deptoCB.activated.connect(self.mostrarMuni) 
     def get_nombre(self):
         global nombre
         return nombre
@@ -64,14 +64,22 @@ class IngresoUsuarios(QMainWindow):
             event.accept()
             sys.exit
 
+    #Cargar departamentos
     def mostrarDeptos(self):
         con = Database_Depto()
-        municipios = con.ObtenerDeptos()
+        deptos = con.ObtenerDeptos()
+        con.close()
+        for i in range(len(deptos)):
+            self.deptoCB.addItem(str(deptos[i])[2:-3])
+    
+    #Cargar municipios
+    def mostrarMuni(self):
+        self.munCB.clear()
+        con = Database_Municipio()   
+        municipios = con.ObtenerMunicipiosFromDepto(self.deptoCB.currentText())
         con.close()
         for i in range(len(municipios)):
-            self.deptoCB.addItem(str(municipios[i])[2:-3])
-
-    
+            self.munCB.addItem(str(municipios[i][0]))
 
     #Metodo registrarse 
     def insertarUsuario(self):

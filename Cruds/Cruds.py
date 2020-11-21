@@ -187,13 +187,18 @@ class Database_Municipio:
         self.cursor.execute("SELECT nombre FROM municipio")
         usuarios = self.cursor.fetchall()
         return usuarios
+
+    def ObtenerMunicipiosFromDepto(self, nombre):
+        self.cursor.execute("SELECT municipio.nombre, depto.nombre FROM municipio INNER JOIN depto ON municipio.Depto_id = depto.id WHERE depto.nombre = %s", (nombre.lower(),))
+        municipios = self.cursor.fetchall()
+        return municipios
     
     def IngresarMunicipio(self, deptoId, nombre, descripcion):
         self.cursor.execute(("INSERT INTO municipio(Depto_id, nombre, descripcion) VALUES (%s, %s, %s)"), (deptoId, nombre, descripcion,))
         self.commit()
 
     def ExisteMunicipio(self, nombre):
-        self.cursor.execute("SELECT nombre FROM Municipio")
+        self.cursor.execute("SELECT nombre FROM municipio")
         deptos = self.cursor.fetchall()
         self.existe = False
         for row in deptos:
@@ -202,7 +207,7 @@ class Database_Municipio:
         return self.existe   
 
     def BorrarMunicipio(self, nombre):
-        self.cursor.execute("DELETE FROM Municipio WHERE nombre = %s", nombre)    
+        self.cursor.execute("DELETE FROM municipio WHERE nombre = %s", nombre)    
         self.commit()
         return self.cursor.rowcount
 
@@ -329,8 +334,7 @@ class Database_Waypoints:
 
 """
 con = Database_Municipio()
-municipios = con.ObtenerMunicipios()
-data = str(municipios[0])[2:-3]
-print(data)
+municipios = con.ObtenerMunicipiosFromDepto('VALLE DEL CAUCA')
+print(municipios)
 con.close()
 """
