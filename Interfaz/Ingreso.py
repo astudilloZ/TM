@@ -128,18 +128,17 @@ class IngresoUsuarios(QMainWindow):
         fecha_Ini_Mision = self.GetDatetimeInicio()
         fecha_Fin_Mision = self.GetDatetimeFin()
 
-        """
-        print("depto: "+str(depto_I)+" muni: "+str(municipio_I)+" lugar: "+str(lugar_I)+" nombreI: "+str(nombre_I))
-        print(" apellidoI: "+str(apellido_I)+" emailI: "+str(email_I)+" contrasenaI: "+str(contrasena_I))
-        print(" contrasenaI2: "+str(contrasena_Confirmacion)+" fechaI: "+str(fecha_Ini_Mision)+" fechaF: "+str(fecha_Fin_Mision))
-        """
-
-        #Verificar que los campos sean validos
-        if nombreIntroducido == "" or contrasenaIntroducida == "" or emailIntroducido == "":
+        #Calcular diferencia en fechas
+        diff = datetime.datetime.strptime(fecha_Ini_Mision, '%d/%m/%Y %H:%M:%S') - datetime.datetime.strptime(fecha_Fin_Mision, '%d/%m/%Y %H:%M:%S')
+        #Verificar que los campos necesarios no sean nulos
+        if lugar_I == "" or nombre_I == "" or contrasena_I == "" or email_I == "":
             QMessageBox.warning(self, "Error en las credenciales", "Los campos nombre de usuario, email y/o contraseña no pueden ser nulos", QMessageBox.Ok)
         #Verificar que las contraseñas coincidan
-        elif contrasenaIntroducida != contrasenaIntroducidaConfirmacion:   
+        elif contrasena_I != contrasena_Confirmacion:   
             QMessageBox.warning(self, "Error en las credenciales", "Las contraseñas deben coincidir", QMessageBox.Ok) 
+        #Verificar que la fecha fin no se menor que la fecha inicio
+        elif diff.total_seconds() > 0:
+            QMessageBox.warning(self, "Error en las fechas introducidad", "Las fecha fin debe ser mayor que la fecha actual", QMessageBox.Ok) 
         #Si son validos
         else:
             #Buscar si el usuario ya existe
@@ -158,7 +157,6 @@ class IngresoUsuarios(QMainWindow):
             #Cerrar conexió base de datos
             bd.close()
         
-
     #Metodo iniciar sesión
     def IniciarSesion(self):
         #Obtener información
