@@ -6,10 +6,12 @@ TG: Fly3d
 
 #Importar paths
 import sys
+import datetime
 sys.path.append('/Users/juansebastianastudillozambrano/Documents/TM-git/Cruds')
 #Importar librerias 
 from Cruds import Database_Mision, Database_Municipio, Database_Depto
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5.QtCore import QDateTime
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QDialog, QGridLayout, 
 QMessageBox, QLabel, QPushButton, QLineEdit, QSpinBox)
 
@@ -33,14 +35,24 @@ class IngresoUsuarios(QMainWindow):
         self.centerOnScreen()
         #Llenar combo box
         self.mostrarDeptos()
+        self.mostrarMuni()
+        #Ajustar formatos datetime
+        self.inicioDT.setDisplayFormat("dd/MM/yyyy hh:mm:ss")
+        self.finDT.setDisplayFormat("dd/MM/yyyy hh:mm:ss")
+        #Setear fecha datetime
+        self.SetDatetimeInicio()
+        self.SetDatetimeFin()
         #Listeners de los botones
         self.Rbutton.clicked.connect(self.insertarUsuario)
         self.ISbutton.clicked.connect(self.IniciarSesion)
         self.deptoCB.activated.connect(self.mostrarMuni) 
+    
+    #Obtener nombre de usuario
     def get_nombre(self):
         global nombre
         return nombre
 
+    #Obtener ingreso 
     def get_ingreso(self):
         global ingreso
         return ingreso
@@ -81,25 +93,47 @@ class IngresoUsuarios(QMainWindow):
         for i in range(len(municipios)):
             self.munCB.addItem(str(municipios[i][0]))
 
+    #Setear fecha en datatime inicio
+    def SetDatetimeInicio(self):
+        now = QDateTime.currentDateTime()
+        self.inicioDT.setDateTime(now)
+
+    def SetDatetimeFin(self):
+        now = QDateTime.currentDateTime()
+        self.finDT.setDateTime(now)
+
+    #Obtener fecha de inicio mision
+    def GetDatetimeInicio(self):
+        dt = self.inicioDT.dateTime()
+        dt_string = dt.toString(self.inicioDT.displayFormat())
+        return dt_string
+
+    #Obtener fecha de fin mision
+    def GetDatetimeFin(self):
+        dt = self.finDT.dateTime()
+        dt_string = dt.toString(self.finDT.displayFormat())
+        return dt_string
+
     #Metodo registrarse 
     def insertarUsuario(self):
         #Extraer información
-        depto_I = ""
-        municipio_I = ""
+        depto_I = self.deptoCB.currentText()
+        municipio_I = self.munCB.currentText()
         lugar_I = self.lugarR.text()       
         nombre_I= self.nombreR.text()
         apellido_I = self.apellidoR.text()
         email_I = self.emailR.text()
-        contrasena_I = self.ContrasenaR.text()
-        contrasena_Confirmacion = self.ContrasenaR2.text()
-        fecha_Ini_Mision = ""
-        fecha_Fin_Mision = ""
+        contrasena_I = self.contrasenaR.text()
+        contrasena_Confirmacion = self.contrasenaR2.text()
+        fecha_Ini_Mision = self.GetDatetimeInicio()
+        fecha_Fin_Mision = self.GetDatetimeFin()
 
+        """
         print("depto: "+str(depto_I)+" muni: "+str(municipio_I)+" lugar: "+str(lugar_I)+" nombreI: "+str(nombre_I))
         print(" apellidoI: "+str(apellido_I)+" emailI: "+str(email_I)+" contrasenaI: "+str(contrasena_I))
         print(" contrasenaI2: "+str(contrasena_Confirmacion)+" fechaI: "+str(fecha_Ini_Mision)+" fechaF: "+str(fecha_Fin_Mision))
-
         """
+
         #Verificar que los campos sean validos
         if nombreIntroducido == "" or contrasenaIntroducida == "" or emailIntroducido == "":
             QMessageBox.warning(self, "Error en las credenciales", "Los campos nombre de usuario, email y/o contraseña no pueden ser nulos", QMessageBox.Ok)
@@ -123,7 +157,7 @@ class IngresoUsuarios(QMainWindow):
                 QMessageBox.warning(self, "Error", "El usuario ya existe!!", QMessageBox.Ok)  
             #Cerrar conexió base de datos
             bd.close()
-        """
+        
 
     #Metodo iniciar sesión
     def IniciarSesion(self):
