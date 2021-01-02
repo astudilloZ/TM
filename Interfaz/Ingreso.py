@@ -9,9 +9,9 @@ import sys
 import datetime
 sys.path.append('/Users/juansebastianastudillozambrano/Documents/TM-git/Cruds')
 #Importar librerias 
-from Cruds import Database_Mision, Database_Municipio, Database_Depto
+from Cruds import Database_Mision, Database_Users, Database_Municipio, Database_Depto
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtCore import QDateTime
+from PyQt5.QtCore import QDateTime, QTime, QDate
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QDialog, QGridLayout, 
 QMessageBox, QLabel, QPushButton, QLineEdit, QSpinBox)
 
@@ -36,14 +36,18 @@ class IngresoUsuarios(QMainWindow):
         #Llenar combo box
         self.mostrarDeptos()
         self.mostrarMuni()
-        #Ajustar formatos datetime
-        self.inicioDT.setDisplayFormat("dd/MM/yyyy hh:mm:ss")
-        self.finDT.setDisplayFormat("dd/MM/yyyy hh:mm:ss")
-        #Setear fecha datetime
+        #Ajustar formatos date
+        self.FechaR.setDisplayFormat("yyyy-MM-dd")
+        #Ajustar formatos time
+        self.HoraInicioR.setDisplayFormat("hh:mm:ss")
+        self.HoraFinR.setDisplayFormat("hh:mm:ss")
+        #Setear fecha 
         self.SetDatetimeInicio()
-        self.SetDatetimeFin()
+        #Setear horas
+        self.SetHoraInicio()
+        self.SetHoraFin()
         #Listeners de los botones
-        self.Rbutton.clicked.connect(self.insertarUsuario)
+        self.Rbutton.clicked.connect(self.NuevaMision)
         self.ISbutton.clicked.connect(self.IniciarSesion)
         self.deptoCB.activated.connect(self.mostrarMuni) 
     
@@ -93,29 +97,41 @@ class IngresoUsuarios(QMainWindow):
         for i in range(len(municipios)):
             self.munCB.addItem(str(municipios[i][0]))
 
-    #Setear fecha en datatime inicio
+    #Setear fecha en fecha inicio 
     def SetDatetimeInicio(self):
-        now = QDateTime.currentDateTime()
-        self.inicioDT.setDateTime(now)
-
-    def SetDatetimeFin(self):
-        now = QDateTime.currentDateTime()
-        self.finDT.setDateTime(now)
+        now = QDate.currentDate()
+        self.FechaR.setDate(now)
 
     #Obtener fecha de inicio mision
     def GetDatetimeInicio(self):
-        dt = self.inicioDT.dateTime()
-        dt_string = dt.toString(self.inicioDT.displayFormat())
+        dt = self.FechaR.date()
+        dt_string = dt.toString(self.FechaR.displayFormat())
         return dt_string
 
-    #Obtener fecha de fin mision
-    def GetDatetimeFin(self):
-        dt = self.finDT.dateTime()
-        dt_string = dt.toString(self.finDT.displayFormat())
+    #Setear hora en hora de inicio 
+    def SetHoraInicio(self):
+        now = QTime.currentTime()
+        self.HoraInicioR.setTime(now)
+
+    #Setear hora en hora fin
+    def SetHoraFin(self):
+        now = QTime.currentTime()
+        self.HoraFinR.setTime(now)
+
+    #Obtener hora de inicio
+    def GetHoraInicio(self):
+        dt = self.HoraInicioR.time()
+        dt_string = dt.toString(self.HoraInicioR.displayFormat())
         return dt_string
 
-    #Metodo registrarse 
-    def insertarUsuario(self):
+    #Obtener hora de inicio
+    def GetHoraFin(self):
+        dt = self.HoraFinR.time()
+        dt_string = dt.toString(self.HoraFinR.displayFormat())
+        return dt_string
+
+    #Metodo registrar misión 
+    def NuevaMision(self):
         #Extraer información
         depto_I = self.deptoCB.currentText()
         municipio_I = self.munCB.currentText()
@@ -125,37 +141,69 @@ class IngresoUsuarios(QMainWindow):
         email_I = self.emailR.text()
         contrasena_I = self.contrasenaR.text()
         contrasena_Confirmacion = self.contrasenaR2.text()
-        fecha_Ini_Mision = self.GetDatetimeInicio()
-        fecha_Fin_Mision = self.GetDatetimeFin()
+        fecha_I = self.GetDatetimeInicio()
+        hora_I = self.GetHoraInicio()
+        hora_Fin = self.GetHoraFin()
 
+        print("depto_I: "+depto_I)
+        print("municipio_I: "+municipio_I)
+        print("lugar_I: "+lugar_I)
+        print("nombre_I: "+nombre_I)
+        print("apellido_I: "+apellido_I)
+        print("email_I: "+email_I)
+        print("contrasena_I: "+contrasena_I)
+        print("contrasena_Confirmacion: "+contrasena_Confirmacion)
+        print("fecha_I: "+fecha_I)
+        print("hora_I: "+hora_I)
+        print("hora_Fin: "+hora_Fin)
+
+        # ------------- Validación de datos---------------------------
         #Calcular diferencia en fechas
-        diff = datetime.datetime.strptime(fecha_Ini_Mision, '%d/%m/%Y %H:%M:%S') - datetime.datetime.strptime(fecha_Fin_Mision, '%d/%m/%Y %H:%M:%S')
-        #Verificar que los campos necesarios no sean nulos
-        if lugar_I == "" or nombre_I == "" or contrasena_I == "" or email_I == "":
-            QMessageBox.warning(self, "Error en las credenciales", "Los campos nombre de usuario, email y/o contraseña no pueden ser nulos", QMessageBox.Ok)
+        diff = datetime.datetime.strptime(hora_I, '%H:%M:%S') - datetime.datetime.strptime(hora_Fin, '%H:%M:%S')
+        #Verificar que los campos  (depto, muni, lugar, nombre, contraseña, email necesarios no sean nulos
+        if depto_I == "" or municipio_I == "" or lugar_I == "" or nombre_I == "" or email_I == "" or contrasena_I == "" or contrasena_Confirmacion == "":
+            QMessageBox.warning(self, "Campos vacios", "Los campos marcados * no pueden estar vacios", QMessageBox.Ok)
         #Verificar que las contraseñas coincidan
         elif contrasena_I != contrasena_Confirmacion:   
             QMessageBox.warning(self, "Error en las credenciales", "Las contraseñas deben coincidir", QMessageBox.Ok) 
         #Verificar que la fecha fin no se menor que la fecha inicio
         elif diff.total_seconds() > 0:
-            QMessageBox.warning(self, "Error en las fechas introducidad", "Las fecha fin debe ser mayor que la fecha actual", QMessageBox.Ok) 
+            QMessageBox.warning(self, "Error en los horarios introducidos", "La hora fin debe ser mayor que la hora inicial", QMessageBox.Ok) 
+                
         #Si son validos
         else:
             #Buscar si el usuario ya existe
-            bd = Database_Table_Usuarios()
-            existe = bd.ElUsuarioExiste(emailIntroducido)
+            bd_users = Database_Users()
+            bd_muni = Database_Municipio()
+            bd_mision = Database_Mision()
+            existe = bd_users.ElUsuarioExiste(email_I)
             #Si no existe, se inserta en base de datos
             if existe == False:  
                 try:
-                    bd.IngresarUsuario(nombreIntroducido, contrasenaIntroducida, direccionIntroducida, emailIntroducido)
-                    QMessageBox.information(self, "Correcto", "Usuario guardado", QMessageBox.Ok)
+                    #Crear Usuario
+                    bd_users.IngresarUsuario(nombre_I, apellido_I, email_I, contrasena_I)
+                    #Crear nueva misión
+                    idUsuario = bd_users.ObtenerIdUsuario(email_I)
+                    idMuni = bd_muni.ObtenerIdMunicipio(municipio_I)
+                    bd_mision.CrearMision(idUsuario, idMuni, lugar_I, fecha_I, hora_I, hora_Fin)                   
+                    QMessageBox.information(self, "Correcto", "Usuario y misión creada!", QMessageBox.Ok)
+
                 except:
                     QMessageBox.warning(self, "Error", "No se pudo registrar el usuario, por favor vuelva a intentarlo.", QMessageBox.Ok)
-            #Si existe se manda mensaje de error
-            else:
-                QMessageBox.warning(self, "Error", "El usuario ya existe!!", QMessageBox.Ok)  
-            #Cerrar conexió base de datos
-            bd.close()
+                      
+            #Si existe se le crea una nueva mision
+            else:               
+                try:
+                    #Crear nueva misión
+                    idUsuario = bd_users.ObtenerIdUsuario(email_I)
+                    idMuni = bd_muni.ObtenerIdMunicipio(municipio_I)
+                    bd_mision.CrearMision(idUsuario, idMuni, lugar_I, fecha_I, hora_I, hora_Fin)                   
+                    QMessageBox.information(self, "Correcto", "Misión creada para el usuario existente!", QMessageBox.Ok)
+                except:
+                    QMessageBox.warning(self, "Error", "No se pudo registrar la misión, por favor vuelva a intentarlo.", QMessageBox.Ok)
+            #Cerrar conexiones bases de datos
+            bd_users.close()
+            bd_muni.close()
         
     #Metodo iniciar sesión
     def IniciarSesion(self):

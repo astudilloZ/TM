@@ -50,6 +50,9 @@ class Database_Mision:
     def fetchone(self):
         return self.cursor.fetchone()
 
+    def CrearMision(self, UserId, MunicipioId, Lugar, Fecha, HoraInicio, HoraFinal): #LaserCalM, LaserCalB, VelocidadVuelo, paramAlg1, paramAlg2, paramAlg3, paramAlg4):
+        self.cursor.execute(("INSERT INTO Mision(Users_id, Municipio_id, Lugar, Fecha, HoraInicio, HoraFin, LaserCalM, LaserCalB, VelocidadVuelo, paramAlg1, paramAlg2, paramAlg3, paramAlg4) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"), (UserId, MunicipioId, Lugar.lower(), Fecha, HoraInicio, HoraFinal, 1, 1, 1, 1, 1, 1, 1))
+        self.commit()
 
 """Conexión a tabla Usuarios 
 
@@ -114,11 +117,13 @@ class Database_Users:
         return self.nombre
 
     def IngresarUsuario(self, NombreUsuario, ApellidosUsuario, EmailUsuario, ClaveUsuario):
-        self.cursor.execute(("INSERT INTO Users(NombreUsuario, ApellidosUsuario, EmailUsuario, ClaveUsuario) VALUES (%s, %s, %s, %s)"), (NombreUsuario, ApellidosUsuario, EmailUsuario, ClaveUsuario))
+        self.cursor.execute(("INSERT INTO Users(NombreUsuario, ApellidosUsuario, EmailUsuario, ClaveUsuario) VALUES (%s, %s, %s, %s)"), (NombreUsuario.lower(), ApellidosUsuario.lower(), EmailUsuario.lower(), ClaveUsuario))
         self.commit()
 
-    def BorrarUsuario(self, EmailUsuario):
-        self.cursor.execute("")
+    def ObtenerIdUsuario(self, Email):
+        self.cursor.execute(("SELECT id FROM Users WHERE EmailUsuario = %s"), (Email.lower(),))
+        idUsuario = self.cursor.fetchall()
+        return idUsuario[0][0]
 
 """Conexión a tabla Depto
 
@@ -254,6 +259,11 @@ class Database_Municipio:
         self.cursor.execute("SELECT municipio.nombre, depto.nombre FROM municipio INNER JOIN depto ON municipio.Depto_id = depto.id WHERE municipio.nombre = %s", (nombre.lower(),))
         return self.cursor.fetchall()
 
+    def ObtenerIdMunicipio(self, nombre):
+        self.cursor.execute(("SELECT id FROM Municipio WHERE nombre = %s"), (nombre.lower(),))
+        idMuni = self.cursor.fetchall()
+        return idMuni[0][0]
+
 """Conexión a tabla Laser
 
 Funciones:
@@ -378,8 +388,11 @@ print(municipios)
 con.close()
 """
 
-db = Database_Users()
-print(db.ElUsuarioExiste("jsaz977@gmail.com"))
+#db = Database_Mision()
+#print(db.ElUsuarioExiste("jsaz977@gmail.com"))
 #print(db.ObtenerUsuarios())
 #db.IngresarUsuario("Juan", "Astudillo", "jsaz977@gmail.com", "1234")
-db.close()
+#print(db.ObtenerIdUsuario("jsaz977@gmail.com"))
+#print(db.ObtenerIdMunicipio("medellin"))
+#db.CrearMision(2, 1005, "canchas", "2021-01-17", "16:31:45", "16:31:45")
+#db.close()
