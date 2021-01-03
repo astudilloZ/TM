@@ -108,7 +108,7 @@ class Database_Users:
         return self.existe   
 
     def ObtenerNombreUsuario(self, Email):
-        self.cursor.execute("SELECT EmailUsuarios, NombreUsuario FROM Users")
+        self.cursor.execute("SELECT EmailUsuario, NombreUsuario FROM Users")
         usuarios = self.cursor.fetchall()
         self.nombre = ""
         for row in usuarios:
@@ -124,6 +124,13 @@ class Database_Users:
         self.cursor.execute(("SELECT id FROM Users WHERE EmailUsuario = %s"), (Email.lower(),))
         idUsuario = self.cursor.fetchall()
         return idUsuario[0][0]
+
+    def CompararContrasena(self, Email, contrasenaIngresada):
+        contrasena = self.cursor.execute(("SELECT ClaveUsuario FROM Users WHERE EmailUsuario = %s"), (Email.lower(),))
+        self.coincide = False
+        if contrasena == contrasenaIngresada:
+            self.coincide = True
+        return self.coincide
 
 """Conexión a tabla Depto
 

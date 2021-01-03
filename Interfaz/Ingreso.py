@@ -208,23 +208,23 @@ class IngresoUsuarios(QMainWindow):
     #Metodo iniciar sesión
     def IniciarSesion(self):
         #Obtener información
-        emailIntroducido = self.EmailIS.text()
-        contrasenaIntroducida = self.ContrasenaIS.text()
-        #bd = Database_Table_Usuarios()
-        #global nombre
-        #nombre = bd.ObtenerNombreUsuario(emailIntroducido)  
+        email_is = self.emailIS.text()
+        contrasena_is = self.contrasenaIS.text()
 
-        """     
+        global nombre
+        bd_users = Database_Users()
+        nombre = bd_users.ObtenerNombreUsuario(email_is)  
+   
         #Verificar que los campos sean validos
-        if emailIntroducido == "" or contrasenaIntroducida == "":
+        if email_is == "" or contrasena_is == "":
             QMessageBox.warning(self, "Error en las credenciales", "Los campos email y/o contraseña no pueden ser nulos", QMessageBox.Ok)
         else:
             #Buscar si el usuario ya existe        
-            existe = bd.ElUsuarioExiste(emailIntroducido)
+            existe = bd_users.ElUsuarioExiste(email_is)
             #Existe el nombre
             if existe == True:
                 #Verificar que la contraseña coincida
-                contraCoincide = bd.CompararContrasena(emailIntroducido, contrasenaIntroducida)
+                contraCoincide = bd_users.CompararContrasena(email_is, contrasena_is)
                 #Coincide la contraseña
                 if contraCoincide == True:
                     global ingreso
@@ -239,9 +239,7 @@ class IngresoUsuarios(QMainWindow):
             #No existe el nombre
             else:
                 QMessageBox.warning(self, "Error", "El usuario no existe!!", QMessageBox.Ok)
-        bd.close()
-        """
-
+        bd_users.close()
 
 #Instancia para iniciar una aplicación
 app = QApplication(sys.argv)
