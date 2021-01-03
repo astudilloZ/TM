@@ -192,15 +192,22 @@ class IngresoUsuarios(QMainWindow):
                     QMessageBox.warning(self, "Error", "No se pudo registrar el usuario, por favor vuelva a intentarlo.", QMessageBox.Ok)
                       
             #Si existe se le crea una nueva mision
-            else:               
-                try:
-                    #Crear nueva misión
-                    idUsuario = bd_users.ObtenerIdUsuario(email_I)
-                    idMuni = bd_muni.ObtenerIdMunicipio(municipio_I)
-                    bd_mision.CrearMision(idUsuario, idMuni, lugar_I, fecha_I, hora_I, hora_Fin)                   
-                    QMessageBox.information(self, "Correcto", "Misión creada para el usuario existente!", QMessageBox.Ok)
-                except:
-                    QMessageBox.warning(self, "Error", "No se pudo registrar la misión, por favor vuelva a intentarlo.", QMessageBox.Ok)
+            else:  
+                # Verificar contraseña
+                contraCoincideR = bd_users.CompararContrasena(email_I, contrasena_I)
+                # Si coincide crear la misión
+                if contraCoincideR == True:
+                    try:
+                        #Crear nueva misión
+                        idUsuario = bd_users.ObtenerIdUsuario(email_I)
+                        idMuni = bd_muni.ObtenerIdMunicipio(municipio_I)
+                        bd_mision.CrearMision(idUsuario, idMuni, lugar_I, fecha_I, hora_I, hora_Fin)                   
+                        QMessageBox.information(self, "Correcto", "Misión creada para el usuario existente!", QMessageBox.Ok)
+                    except:
+                        QMessageBox.warning(self, "Error", "No se pudo registrar la misión, por favor vuelva a intentarlo.", QMessageBox.Ok)
+                # Si no coincide lanzar mensaje de error
+                else:
+                    QMessageBox.warning(self, "Error", "Credenciales de usuario existente incorrectas", QMessageBox.Ok)                              
             #Cerrar conexiones bases de datos
             bd_users.close()
             bd_muni.close()

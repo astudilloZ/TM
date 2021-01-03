@@ -125,10 +125,11 @@ class Database_Users:
         idUsuario = self.cursor.fetchall()
         return idUsuario[0][0]
 
-    def CompararContrasena(self, Email, contrasenaIngresada):
-        contrasena = self.cursor.execute(("SELECT ClaveUsuario FROM Users WHERE EmailUsuario = %s"), (Email.lower(),))
+    def CompararContrasena(self, Email, contrasenaIngresada):     
+        self.cursor.execute(("SELECT ClaveUsuario FROM Users WHERE EmailUsuario = %s"), (Email.lower(),))
+        contrasena = self.cursor.fetchall()
         self.coincide = False
-        if contrasena == contrasenaIngresada:
+        if contrasena[0][0] == contrasenaIngresada:
             self.coincide = True
         return self.coincide
 
@@ -395,7 +396,8 @@ print(municipios)
 con.close()
 """
 
-#db = Database_Mision()
+#db = Database_Users()
+#print(db.CompararContrasena("jsaz977@gmail.com", "1234"))
 #print(db.ElUsuarioExiste("jsaz977@gmail.com"))
 #print(db.ObtenerUsuarios())
 #db.IngresarUsuario("Juan", "Astudillo", "jsaz977@gmail.com", "1234")
